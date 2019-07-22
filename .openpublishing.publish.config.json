@@ -62,7 +62,7 @@
     {
       "url": "https://github.com/Microsoft/templates.docs.msft",
       "branch_mapping": {},
-      "branch": "real-api-usage",
+      "branch": "pr-13860",
       "path_to_root": "_themes"
     },
     {
