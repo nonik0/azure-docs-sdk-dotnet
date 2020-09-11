@@ -106,7 +106,7 @@
       "nuget_feed": "https://www.myget.org/F/op-dev/api/v2",
       "path_to_root": "_dependentPackages/ECMA2Yaml",
       "target_framework": "net45",
-      "version": "0.0.1-alpha-pr-151-20200910-2"
+      "version": "0.0.1-alpha-pr-151-20200911-2"
     }
   ],
   "need_generate_pdf_url_template": false
