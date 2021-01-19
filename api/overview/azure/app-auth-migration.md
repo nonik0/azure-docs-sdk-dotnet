@@ -29,7 +29,7 @@ If you are starting development of a new application, it is strongly recommended
 
 |Auth Provider|AppAuthentication<br>Connection String|Azure.Identity<br>TokenCredential|
 |---------|---------|---------|
-|Default - environment-based | Default - no connection string used | new DefaultAzureCredential()*|
+|Default / environment-based | Default - no connection string used | new DefaultAzureCredential()*|
 |Azure CLI| RunAs=Developer;<br>DeveloperTool=AzureCli|new AzureCliCredential()|
 |Visual Studio|RunAs=Developer; DeveloperTool=VisualStudio|new VisualStudioCredential()|
 |Windows Integrated Authentication|RunAs=CurrentUser| No support|
@@ -41,8 +41,8 @@ If you are starting development of a new application, it is strongly recommended
 |Service principal client secret|RunAs=App;AppId=appId;TenantId=tenantId;<br>AppKey=secret|new EnvironmentCredential()**<br>new ClientSecretCredential(tenantId, appId, secret)|
 
 > [!NOTE]
-> `*` Authentication providers and order is different between [AzureServiceTokenProvider](https://github.com/Azure/azure-sdk-for-net/blob/7d23a9d912da40baeebee1125eb5ebefa78449a2/sdk/mgmtcommon/AppAuthentication/Azure.Services.AppAuthentication/AzureServiceTokenProvider.cs#L104) and [DefaultAzureCredential](https://docs.microsoft.com/dotnet/api/overview/azure/identity-readme#defaultazurecredential)<br>
-> `**` Need to set [environment variables](https://github.com/Azure/azure-sdk-for-net/tree/master/sdk/identity/Azure.Identity#environment-variables)
+> \* Authentication providers and order is different between [AzureServiceTokenProvider](https://github.com/Azure/azure-sdk-for-net/blob/7d23a9d912da40baeebee1125eb5ebefa78449a2/sdk/mgmtcommon/AppAuthentication/Azure.Services.AppAuthentication/AzureServiceTokenProvider.cs#L104) and [DefaultAzureCredential](https://docs.microsoft.com/dotnet/api/overview/azure/identity-readme#defaultazurecredential)<br>
+> \*\* Need to set [environment variables](https://github.com/Azure/azure-sdk-for-net/tree/master/sdk/identity/Azure.Identity#environment-variables)
 
 While Azure.Identity supports most authentication scenarios and providers that AppAuthentication has, there are some scenarios and features that are currently not supported:
 
@@ -66,20 +66,19 @@ Below are some examples of migrating from an older Azure client SDK using AppAut
 **Microsoft.Azure.KeyVault to Azure.Security.KeyVault:**
 
 * Using `AppAuthentication` library
+
 ```csharp
 AzureServiceTokenProvider tokenProvider = new AzureServiceTokenProvider();
-
 var client = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(tokenProvider.KeyVaultTokenCallback));
-
 var secretBundle = await client.GetSecretAsync("https://keyvaultname.vault.azure.net/secrets/secretname");
 
 Console.WriteLine(secretBundle.Value);
 ```
 
 * Using `Azure.Identity` library
+
 ```csharp
 var client = new SecretClient(new Uri("https://keyvaultname.vault.azure.net"), new DefaultAzureCredential());
-
 var secret = client.GetSecret("secretName").Value;
 
 Console.WriteLine(secret.Value);
@@ -91,26 +90,21 @@ Console.WriteLine(secret.Value);
 
 ```csharp
 var tokenProvider = new AzureServiceTokenProvider();
-
 var accessToken = await tokenProvider.GetAccessTokenAsync(\"https://storageaccountname.queue.core.windows.net");
 
 var tokenCredential = new StorageTokenCredential(accessToken);
-
 var storageCredentials = new StorageCredentials(tokenCredential);
-
 var uri = new StorageUri(new Uri("https://storageaccountname.queue.core.windows.net"));
-
 var client = new CloudQueueClient(uri, storageCredentials);
 
 var queue = client.GetQueueReference("queuename");
-
 queue.AddMessage(new CloudQueueMessage("Microsoft.Azure.Storage.Queues"));
 ```
 
 * Using `Azure.Identity` library
+
 ```csharp
 QueueClient queueClient = new QueueClient(new Uri("https://storageaccountname.queue.core.windows.net/queuename"),new DefaultAzureCredential());
-
 queueClient.SendMessage("Azure.Storage.Queues");
 ```
 
@@ -120,9 +114,7 @@ queueClient.SendMessage("Azure.Storage.Queues");
 * Using `AppAuthentication` library
 
 ```csharp
-
 var tokenProvider = new AzureServiceTokenProvider();
-
 var accessToken = await tokenProvider.GetAccessTokenAsync(ResourceId);
 ```
 
